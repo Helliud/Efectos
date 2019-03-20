@@ -9,8 +9,19 @@ namespace Reproductor
 {
     class Delay : ISampleProvider
     {
+        public bool Activo
+        {
+            get; set;
+        }
+
         private ISampleProvider fuente;
-        public int OffsetMilisegundos { get; set; }
+        private int offsetMilisegundos;
+        public int OffsetMilisegundos {
+            get { return offsetMilisegundos; }
+            set { offsetMilisegundos = value;
+                cantidadMuestrasOffset = (int)(((float)OffsetMilisegundos / 1000.0f) * (float)fuente.WaveFormat.SampleRate); 
+            }
+        }
         private int cantidadMuestrasOffset;
 
         private List<float> bufferDelay = new List<float>();
@@ -28,6 +39,7 @@ namespace Reproductor
 
         public Delay(ISampleProvider fuente)
         {
+            Activo = false;
             this.fuente = fuente;
             OffsetMilisegundos = 500;
             cantidadMuestrasOffset = (int)(((float)OffsetMilisegundos / 1000.0f) * (float)fuente.WaveFormat.SampleRate); ;
@@ -37,6 +49,7 @@ namespace Reproductor
 
         public int Read(float[] buffer, int offset, int count)
         {
+
             //Leemos las muestras de la senal fuente
             var read = fuente.Read(buffer, offset, count);
             //Calcular tiempo trancurrido
@@ -57,17 +70,19 @@ namespace Reproductor
             }
 
             //Aplicar el efecto
-            if(milisegundosTranscurridos > OffsetMilisegundos)
+            if (Activo)
             {
-                for(int i = 0; i < read; i++)
+                if (milisegundosTranscurridos > OffsetMilisegundos)
                 {
-                    buffer[offset + i] += bufferDelay[cantidadMuestraTranscurridas - cantidadMuestrasBorradas + i - cantidadMuestrasOffset];
+                    for (int i = 0; i < read; i++)
+                    {
+                        buffer[offset + i] += bufferDelay[cantidadMuestraTranscurridas - cantidadMuestrasBorradas + i - cantidadMuestrasOffset];
+                    }
                 }
+
             }
 
             cantidadMuestraTranscurridas += read;
-
-            
             return read;
         }
     }

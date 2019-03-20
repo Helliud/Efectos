@@ -29,10 +29,10 @@
         <TextBox x:Name="txtDuracionFadOut" HorizontalAlignment="Left" Height="23" Margin="208,220,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="120"/>
         <Button x:Name="btnFadeOut" Content="Iniciar FADE OUT" HorizontalAlignment="Left" Margin="362,219,0,0" VerticalAlignment="Top" Width="129" Click="btnFadeOut_Click"/>
         <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Margin="26,248,0,0" TextWrapping="Wrap" Text="Delay" VerticalAlignment="Top"/>
-        <CheckBox x:Name="cbDelayActivo" Content="Activo" HorizontalAlignment="Left" Margin="26,269,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="cbDelayActivo" Click="cbDelayActivo_Click"  Content="Activo" HorizontalAlignment="Left" Margin="26,269,0,0" VerticalAlignment="Top" Checked="cbDelayActivo_Checked"/>
         <TextBlock x:Name="textBlock2" HorizontalAlignment="Left" Margin="168,265,0,0" TextWrapping="Wrap" Text="Offset:" VerticalAlignment="Top"/>
-        <Slider x:Name="sldDelayOffset" HorizontalAlignment="Left" Margin="208,265,0,0" VerticalAlignment="Top" Width="231"/>
-        <TextBlock x:Name="lblDelayOffset" HorizontalAlignment="Left" Margin="414,286,0,0" TextWrapping="Wrap" Text="0 ms" VerticalAlignment="Top" RenderTransformOrigin="-0.614,2.293"/>
+        <Slider x:Name="sldDelayOffset" HorizontalAlignment="Left" Margin="208,265,0,0" VerticalAlignment="Top" Width="231" Maximum="3000" Minimum="100" ValueChanged="sldDelayOffset_ValueChanged"/>
+        <TextBlock x:Name="lblDelayOffset" HorizontalAlignment="Left" Margin="414,286,0,0" TextWrapping="Wrap" Text="500 ms" VerticalAlignment="Top" RenderTransformOrigin="-0.614,2.293"/>
         <TextBlock x:Name="textBlock3" HorizontalAlignment="Left" Margin="463,265,0,0" TextWrapping="Wrap" Text="Ganancia:" VerticalAlignment="Top"/>
         <Slider x:Name="sldDelayGanancia" HorizontalAlignment="Left" Margin="519,264,0,0" VerticalAlignment="Top" Width="230"/>
         <TextBlock x:Name="lblDelayGanancia" HorizontalAlignment="Left" Margin="743,286,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
