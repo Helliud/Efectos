@@ -9,6 +9,9 @@ namespace Reproductor
 {
     class Delay : ISampleProvider
     {
+
+       public float ganancia = 0;
+
         public bool Activo
         {
             get; set;
@@ -72,11 +75,12 @@ namespace Reproductor
             //Aplicar el efecto
             if (Activo)
             {
+
                 if (milisegundosTranscurridos > OffsetMilisegundos)
                 {
                     for (int i = 0; i < read; i++)
                     {
-                        buffer[offset + i] += bufferDelay[cantidadMuestraTranscurridas - cantidadMuestrasBorradas + i - cantidadMuestrasOffset];
+                        buffer[offset + i] += bufferDelay[cantidadMuestraTranscurridas - cantidadMuestrasBorradas + i - cantidadMuestrasOffset] * ganancia;
                     }
                 }
 

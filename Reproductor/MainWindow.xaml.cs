@@ -57,7 +57,7 @@ namespace Reproductor
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            if(reader != null)
+            if (reader != null)
             {
                 lblTiempoInicial.Text = reader.CurrentTime.ToString().Substring(0, 8);
                 if (!dragging)
@@ -70,7 +70,7 @@ namespace Reproductor
         private void LlenarComboSalida()
         {
             cbSalida.Items.Clear();
-            for(int i = 0; i < WaveOut.DeviceCount; i++)
+            for (int i = 0; i < WaveOut.DeviceCount; i++)
             {
                 WaveOutCapabilities capacidades = WaveOut.GetCapabilities(i);
                 cbSalida.Items.Add(capacidades.ProductName);
@@ -82,7 +82,7 @@ namespace Reproductor
         {
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            if(openFileDialog.ShowDialog() == true)
+            if (openFileDialog.ShowDialog() == true)
             {
                 txtRutaArchivo.Text = openFileDialog.FileName;
             }
@@ -91,7 +91,7 @@ namespace Reproductor
 
         private void btnReproducir_Click(object sender, RoutedEventArgs e)
         {
-           
+
             if (output != null && output.PlaybackState == PlaybackState.Paused)
             {
                 output.Play();
@@ -102,10 +102,16 @@ namespace Reproductor
             else
             {
                 reader = new AudioFileReader(txtRutaArchivo.Text);
+
                 delay = new Delay(reader);
                 delay.Activo = (bool)cbDelayActivo.IsChecked;
                 delay.OffsetMilisegundos = (int)sldDelayOffset.Value;
+                delay.ganancia = (float)sldDelayGanancia.Value;
+
+       
+
                 fades = new FadeInOutSampleProvider(delay, true);
+
                 double milisegudosFadeIn = Double.Parse(txtDuracionFadeIn.Text) * 1000.0;
                 fades.BeginFadeIn(milisegudosFadeIn);
                 fadeInOut = false;
@@ -117,7 +123,7 @@ namespace Reproductor
 
                 volume = new EfectoVolumen(fades);
 
-                volume.Volume = (float) sldVolumen.Value;
+                volume.Volume = (float)sldVolumen.Value;
 
                 output.Init(volume);
                 output.Play();
@@ -144,7 +150,7 @@ namespace Reproductor
 
         private void btnPausa_Click(object sender, RoutedEventArgs e)
         {
-            if(output != null)
+            if (output != null)
             {
                 output.Pause();
 
@@ -153,12 +159,12 @@ namespace Reproductor
                 btnReproducir.IsEnabled = true;
             }
 
-          
+
         }
 
         private void btnDetener_Click(object sender, RoutedEventArgs e)
         {
-            if(output != null)
+            if (output != null)
             {
                 output.Stop();
 
@@ -184,12 +190,12 @@ namespace Reproductor
 
         private void sldVolumen_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if(volume != null && output != null && output.PlaybackState != PlaybackState.Stopped)
+            if (volume != null && output != null && output.PlaybackState != PlaybackState.Stopped)
             {
                 volume.Volume = (float)sldVolumen.Value;
             }
 
-            if(lblPorcentajeVolumen != null)
+            if (lblPorcentajeVolumen != null)
             {
                 lblPorcentajeVolumen.Text = ((int)(sldVolumen.Value * 100)).ToString() + "%";
             }
@@ -197,7 +203,7 @@ namespace Reproductor
 
         private void btnFadeOut_Click(object sender, RoutedEventArgs e)
         {
-            if(!fadeInOut && fades != null && output != null && output.PlaybackState == PlaybackState.Playing)
+            if (!fadeInOut && fades != null && output != null && output.PlaybackState == PlaybackState.Playing)
             {
                 fadeInOut = true;
                 double miliSegundosFadeOut = Double.Parse(txtDuracionFadOut.Text) * 1000.0;
@@ -205,14 +211,7 @@ namespace Reproductor
             }
         }
 
-        private void cbDelayActivo_Checked(object sender, RoutedEventArgs e)
-        {
-            if(cbDelayActivo.IsEnabled == true)
-            {
-                sldDelayOffset.IsEnabled = false;
-            }
-            
-        }
+   
 
         private void cbDelayActivo_Click(object sender, RoutedEventArgs e)
         {
@@ -234,6 +233,20 @@ namespace Reproductor
                 delay.OffsetMilisegundos = (int)sldDelayOffset.Value;
             }
 
+        }
+
+
+        private void sldDelayGanancia_ValueChanged_1(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (lblDelayGanancia != null)
+            {
+                lblDelayGanancia.Text = sldDelayGanancia.Value.ToString();
+
+            }
+            if (delay != null)
+            {
+               delay.ganancia = (float)sldDelayGanancia.Value;
+            }
         }
     }
 
