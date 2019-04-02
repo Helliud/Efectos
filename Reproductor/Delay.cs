@@ -10,7 +10,6 @@ namespace Reproductor
     class Delay : ISampleProvider
     {
 
-       public float ganancia = 0;
 
         public bool Activo
         {
@@ -32,6 +31,7 @@ namespace Reproductor
         private int duracionBufferSegundos;
         private int cantidadMuestraTranscurridas = 0;
         private int cantidadMuestrasBorradas = 0;
+        public float Ganancia { get; set; }
         public WaveFormat WaveFormat
         {
             get
@@ -42,12 +42,13 @@ namespace Reproductor
 
         public Delay(ISampleProvider fuente)
         {
-            Activo = false;
             this.fuente = fuente;
             OffsetMilisegundos = 500;
             cantidadMuestrasOffset = (int)(((float)OffsetMilisegundos / 1000.0f) * (float)fuente.WaveFormat.SampleRate); ;
             duracionBufferSegundos = 10;
             tamanoBuffer = fuente.WaveFormat.SampleRate * duracionBufferSegundos;
+            Activo = false;
+            Ganancia = 0.5f;
         }
 
         public int Read(float[] buffer, int offset, int count)
@@ -80,7 +81,7 @@ namespace Reproductor
                 {
                     for (int i = 0; i < read; i++)
                     {
-                        buffer[offset + i] += bufferDelay[cantidadMuestraTranscurridas - cantidadMuestrasBorradas + i - cantidadMuestrasOffset] * ganancia;
+                        buffer[offset + i] += bufferDelay[cantidadMuestraTranscurridas - cantidadMuestrasBorradas + i - cantidadMuestrasOffset] * Ganancia;
                     }
                 }
 

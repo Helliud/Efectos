@@ -106,7 +106,7 @@ namespace Reproductor
                 delay = new Delay(reader);
                 delay.Activo = (bool)cbDelayActivo.IsChecked;
                 delay.OffsetMilisegundos = (int)sldDelayOffset.Value;
-                delay.ganancia = (float)sldDelayGanancia.Value;
+                delay.Ganancia = (float)sldDelayGanancia.Value;
 
        
 
@@ -116,6 +116,10 @@ namespace Reproductor
                 fades.BeginFadeIn(milisegudosFadeIn);
                 fadeInOut = false;
                 output = new WaveOutEvent();
+                output.DesiredLatency = 150;
+
+
+
 
                 output.DeviceNumber = cbSalida.SelectedIndex;
 
@@ -245,7 +249,7 @@ namespace Reproductor
             }
             if (delay != null)
             {
-               delay.ganancia = (float)sldDelayGanancia.Value;
+               delay.Ganancia = (float)sldDelayGanancia.Value;
             }
         }
     }
